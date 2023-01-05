@@ -32,7 +32,7 @@
               </li>
             </ul>
             <ul class="navbar-nav">
-              {% if request.use r.is_authenticated %}
+              {% if not request.user.is_authenticated %}
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'login' %}">Acceder</a>
                 </li>
@@ -51,5 +51,6 @@
       <script src="{% static 'core/vendor/jquery/jquery.min.js' %}"></script>
       <script src="{% static 'core/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
       <script src="{% static 'core/js/main.js' %}"></script>
+    </body>
   </body>
 </html>
