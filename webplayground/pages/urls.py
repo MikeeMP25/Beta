@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import PageDetailView, PagesListViews, PageCreateView
+from .views import *
 
 """
 urlpatterns = [
@@ -11,6 +11,8 @@ pages_patterns = ([
     path('', PagesListViews.as_view(), name="pages"),
     path('<int:pk>/<slug:slug>/', PageDetailView.as_view(), name="page"),
     path('create/', PageCreateView.as_view(), name="create"),
+    path('update/<int:pk>/', PageUpdateView.as_view(), name="update"),
+    path('dalete/<int:pk>/', PageDeleteView.as_view(), name="delete"),
 ], "pages")
 
 # como cambiamos a clase con modelos directos cuando mandamos la id por la url de int:page_id a
