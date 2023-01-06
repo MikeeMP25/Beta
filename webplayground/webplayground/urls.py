@@ -23,4 +23,8 @@ urlpatterns = [
     path('pages/', include(pages_patterns)),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/', include('registration.urls')),
 ]
+
+# cuando le asignamos el mismo direcctorio raiz lo que hacemos es aumentar las direcciones de esa
+# carpeta mas ficheros dentro 'accounts/'
