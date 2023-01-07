@@ -127,7 +127,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # despues de la autentificacion del usuario redirecciona la urls que tiene acceso el usuario
-LOGIN_REDIRECT_URL = 'pages:pages'
+# LOGIN_REDIRECT_URL = 'pages:pages'
 LOGOUT_REDIRECT_URL = 'home'
 
 # Email verificarcion de cuentas de usuarios
@@ -137,3 +137,8 @@ if DEBUG:
     EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 else:
     pass
+
+
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
