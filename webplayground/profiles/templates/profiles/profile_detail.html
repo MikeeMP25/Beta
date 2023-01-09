@@ -1,0 +1,31 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}{{profiles.user}}{% endblock %}
+{% block content %}
+<main role="main">
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col-md-9 mx-auto mb-5">
+        <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+          <div class="row">
+            <!-- Avatar -->
+            <div class="col-md-2">
+              {% if profiles.avatar %}
+                <img src="{{profiles.avatar.url}}" class="img-fluid">
+              {% else %}
+                <img src="{% static 'registration/img/no-avatar.jpg' %}" class="img-fluid">
+              {% endif %}
+            </div>
+            <!-- Campos -->
+            <div class="col-md-10">
+              <h3>{{profiles.user}}</h3>
+              {% if profiles.bio %}<p>{{profiles.bio}}</p>{% endif %}
+              {% if profiles.link %}<p><a href="{{profiles.link}}" target="_blank">{{profiles.link}}</a></p>{% endif %}
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
