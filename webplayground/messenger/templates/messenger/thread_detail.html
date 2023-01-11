@@ -59,8 +59,26 @@
               {% endfor %}
             </div>
             <!-- Aquí crearemos el formulario -->
+            <textarea class="form-control mb-2" id="content"></textarea>
+            <button id="send" class="btn btn-primary btn-sm btn-block">Peticion asincrona de prueba</button>
+            <script>
+              var send=document.getElementById("send");
+              send.addEventListener('click', function (){
+                var content=encodeURIComponent(document.getElementById('content').value);
+                alert(content)
+                if (content !== "" && content !== null){
+                  const url="{% url 'messenger:add' thread.pk %}"+"?content="+content;
+                fetch(url).then(response => response.json()).then(function (data){
+                  alert(data.created);
+                })
+                }else{
+                  alert("No puedes mandar mensajes vacios o null");
+                }
+              })
+            </script>
           </div>
         </div>
+      </div>
     </div>
   </div>
 </main>
