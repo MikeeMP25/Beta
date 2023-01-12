@@ -31,12 +31,15 @@ class ThreadManage(models.Manager):
 class Thread(models.Model):
     users = models.ManyToManyField(User, related_name='threads')
     messages = models.ManyToManyField(Message)
+    updated = models.DateTimeField(auto_now=True)
 
     objects = ThreadManage()
 
+    class Meta:
+        ordering = ['-updated']
+
+
 # vamos a crear la señales de los hilos de respuesta y de entrada
-
-
 def messages_changed(sender, **kwargs):
     instance = kwargs.pop('instance', None)
     action = kwargs.pop('action', None)
@@ -52,6 +55,10 @@ def messages_changed(sender, **kwargs):
                 false_pk_set.add(msg.pk)
     # buscar los mensajes de false_pk_set que no estan en pk_set y los borramos de pk_set
     pk_set.difference_update(false_pk_set)
+
+    # forzar la actualizacion haciendo el guardado
+    instance.save()
+
 
 
 m2m_changed.connect(messages_changed,sender=Thread.messages.through)

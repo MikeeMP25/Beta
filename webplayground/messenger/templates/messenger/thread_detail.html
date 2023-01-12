@@ -1,6 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
-{% block title %}Hilo{% endblock %}
+{% block title %}Mensajes{% endblock %}
 {% block content %}
 <style>
   .avatar  { width:50px; height:50px; float:left; margin-right:10px; }
@@ -24,12 +24,12 @@
                   {% for user in thread.users.all %}
                     {% if user != request.user %}     
                       <!-- Mostramos el avatar del miembro -->                
-                      {% if user.profile.avatar %}
-                        <img src="{{user.profile.avatar.url}}" class="avatar">
+                      {% if user.profiles.avatar %}
+                        <img src="{{user.profiles.avatar.url}}" class="avatar">
                       {% else %}
                         <img src="{% static 'registration/img/no-avatar.jpg' %}" class="avatar">
                       {% endif %}
-                      <!-- Mostramos la información del miembro --> 
+                      <!-- Mostramos la información del miembro-->
                       <div>
                         <a href="{% url 'messenger:detail' thread.pk %}">{{user}}</a><br>
                         <small><i>Hace {{thread.messages.last.created|timesince}}</i></small>
@@ -60,21 +60,47 @@
             </div>
             <!-- Aquí crearemos el formulario -->
             <textarea class="form-control mb-2" id="content"></textarea>
-            <button id="send" class="btn btn-primary btn-sm btn-block">Peticion asincrona de prueba</button>
+            <button id="send" class="btn btn-primary btn-sm btn-block" disabled>Enviar mensaje</button>
             <script>
               var send=document.getElementById("send");
               send.addEventListener('click', function (){
                 var content=encodeURIComponent(document.getElementById('content').value);
-                alert(content)
                 if (content !== "" && content !== null){
+                  document.getElementById('content').value="";
+                  send.disabled=true;
                   const url="{% url 'messenger:add' thread.pk %}"+"?content="+content;
-                fetch(url).then(response => response.json()).then(function (data){
-                  alert(data.created);
+                fetch(url,{'credentials':'include'}).then(response => response.json()).then(function (data){
+                  var message=document.createElement('div');
+                  message.classList.add('mine','mb-3');
+                  message.innerHTML="<small><i>Hace unos segundos</i></small><br>"+decodeURIComponent(content);
+                  document.getElementById('thread').appendChild(message);
+                  ScrollBottomInThread()
+                  if(data.first){
+                    window.location.href="{% url 'messenger:detail' thread.pk %}";
+                  }
+
                 })
                 }else{
-                  alert("No puedes mandar mensajes vacios o null");
+                  alert("No puedes mandar mensajes vacios o null ");
                 }
               })
+              // Es un evento que activa o desactiva el boton dependiendo de si hay o no mensaje
+              var content=document.getElementById("content");
+              content.addEventListener("keyup",function(){
+                if(!this.checkValidity() || !this.value){
+                  send.disabled = true;
+                }else{
+                  send.disabled = false;
+                }
+              })
+
+              // Forzar el scroll a redirigir hasta abajo del contenido
+              function ScrollBottomInThread(){
+                var thread=document.getElementById("thread");
+                thread.scrollTop=thread.scrollHeight;
+
+              }
+              ScrollBottomInThread()
             </script>
           </div>
         </div>
